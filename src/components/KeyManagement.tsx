@@ -111,12 +111,12 @@ export const KeyManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Key Generation */}
-      <Card>
+      <Card className="transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Key className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 group">
+            <Key className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
             RSA Key Pair Generation
           </CardTitle>
           <CardDescription>
@@ -142,15 +142,20 @@ export const KeyManagement: React.FC = () => {
             <Button 
               onClick={generateKeyPair} 
               disabled={isGenerating}
-              className="min-w-32"
+              className="min-w-32 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
             >
-              {isGenerating ? 'Generating...' : 'Generate Keys'}
+              {isGenerating ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
+                  Generating...
+                </div>
+              ) : 'Generate Keys'}
             </Button>
           </div>
           
           {keyPair && (
-            <Alert>
-              <Check className="h-4 w-4" />
+            <Alert className="animate-scale-in border-success/20 bg-success/5">
+              <Check className="h-4 w-4 text-success" />
               <AlertDescription>
                 Key pair generated successfully! Keys are ready for use in digital signatures.
               </AlertDescription>
@@ -161,13 +166,13 @@ export const KeyManagement: React.FC = () => {
 
       {/* Public Key Export */}
       {publicKeyPem && (
-        <Card>
+        <Card className="animate-scale-in transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 border-l-4 border-l-success">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Public Key (PEM Format)</span>
               <div className="flex gap-2">
-                <Badge variant="secondary">{keySize} bits</Badge>
-                <Badge variant="outline">RSA-PSS</Badge>
+                <Badge variant="secondary" className="animate-fade-in">{keySize} bits</Badge>
+                <Badge variant="outline" className="animate-fade-in">RSA-PSS</Badge>
               </div>
             </CardTitle>
             <CardDescription>
@@ -178,21 +183,27 @@ export const KeyManagement: React.FC = () => {
             <Textarea
               value={publicKeyPem}
               readOnly
-              className="font-mono text-xs h-32 resize-none"
+              className="font-mono text-xs h-32 resize-none transition-all duration-300 focus:ring-2 focus:ring-primary/20"
             />
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => copyToClipboard(publicKeyPem, 'Public Key')}
+                className="transition-all duration-300 hover:scale-105"
               >
-                {copiedKey === 'Public Key' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedKey === 'Public Key' ? (
+                  <Check className="h-4 w-4 text-success animate-scale-in" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
                 Copy
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => downloadKey(publicKeyPem, 'public_key.pem')}
+                className="transition-all duration-300 hover:scale-105"
               >
                 <Download className="h-4 w-4" />
                 Download
@@ -204,11 +215,11 @@ export const KeyManagement: React.FC = () => {
 
       {/* Private Key Export */}
       {privateKeyPem && (
-        <Card>
+        <Card className="animate-scale-in transition-all duration-300 hover:shadow-lg hover:shadow-destructive/10 border-l-4 border-l-destructive">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Private Key (PEM Format)</span>
-              <Badge variant="destructive">⚠️ Keep Secure</Badge>
+              <Badge variant="destructive" className="animate-glow">⚠️ Keep Secure</Badge>
             </CardTitle>
             <CardDescription>
               Keep this private key secure and never share it
@@ -218,21 +229,27 @@ export const KeyManagement: React.FC = () => {
             <Textarea
               value={privateKeyPem}
               readOnly
-              className="font-mono text-xs h-32 resize-none"
+              className="font-mono text-xs h-32 resize-none transition-all duration-300 focus:ring-2 focus:ring-destructive/20"
             />
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => copyToClipboard(privateKeyPem, 'Private Key')}
+                className="transition-all duration-300 hover:scale-105"
               >
-                {copiedKey === 'Private Key' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedKey === 'Private Key' ? (
+                  <Check className="h-4 w-4 text-success animate-scale-in" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
                 Copy
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => downloadKey(privateKeyPem, 'private_key.pem')}
+                className="transition-all duration-300 hover:scale-105"
               >
                 <Download className="h-4 w-4" />
                 Download
@@ -243,10 +260,10 @@ export const KeyManagement: React.FC = () => {
       )}
 
       {/* Key Import */}
-      <Card>
+      <Card className="transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 group">
+            <Upload className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1" />
             Import Existing Keys
           </CardTitle>
           <CardDescription>
@@ -261,7 +278,7 @@ export const KeyManagement: React.FC = () => {
               placeholder="-----BEGIN PUBLIC KEY-----&#10;...&#10;-----END PUBLIC KEY-----"
               value={importedPublicKey}
               onChange={(e) => setImportedPublicKey(e.target.value)}
-              className="font-mono text-xs h-24 resize-none"
+              className="font-mono text-xs h-24 resize-none transition-all duration-300 focus:ring-2 focus:ring-primary/20"
             />
           </div>
           
@@ -272,13 +289,14 @@ export const KeyManagement: React.FC = () => {
               placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----"
               value={importedPrivateKey}
               onChange={(e) => setImportedPrivateKey(e.target.value)}
-              className="font-mono text-xs h-24 resize-none"
+              className="font-mono text-xs h-24 resize-none transition-all duration-300 focus:ring-2 focus:ring-primary/20"
             />
           </div>
           
           <Button 
             onClick={importKeys}
             disabled={!importedPublicKey.trim()}
+            className="transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
           >
             Import Keys
           </Button>
